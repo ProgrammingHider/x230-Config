@@ -7,7 +7,9 @@
 x230 Config (My ThinkPad X230 Config)
 
 Original Author (plural): ProgrammingHider (me), 
+			 
 			  Wolfgang (github.com/notthebee)
+			  
 			  merge (github.com/merge)
 
 
