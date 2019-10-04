@@ -267,8 +267,8 @@ awful.screen.connect_for_each_screen(function(s)
             mykeyboardlayout,
             wibox.widget.systray(),
             mytextclock,
-	    spotify_widget
-	    batteryarc_widget
+	    spotify_widget(),
+	    batteryarc_widget(),
             s.mylayoutbox,
         },
     }
