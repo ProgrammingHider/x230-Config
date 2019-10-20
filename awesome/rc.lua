@@ -8,6 +8,7 @@ pcall(require, "luarocks.loader")
 -- awesome-widgets
 local batteryarc_widget = require("awesome-wm-widgets.batteryarc-widget.batteryarc")
 local spotify_widget = require("awesome-wm-widgets.spotify-widget.spotify")
+local volume_widget = require("awesome-wm-widgets.volume-widget.volume")
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
@@ -29,7 +30,7 @@ require("awful.hotkeys_popup.keys")
 -- another config (This code will only ever execute for the fallback config)
 if awesome.startup_errors then
     naughty.notify({ preset = naughty.config.presets.critical,
-                     title = "Oops, there were errors during startup!",
+                     title = "rip muh startup",
                      text = awesome.startup_errors })
 end
 
@@ -42,7 +43,7 @@ do
         in_error = true
 
         naughty.notify({ preset = naughty.config.presets.critical,
-                         title = "Oops, an error happened!",
+                         title = "u ducked up local",
                          text = tostring(err) })
         in_error = false
     end)
@@ -55,6 +56,8 @@ beautiful.init(awful.util.getdir("config") .. "/themes/default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "st"
+lock = "i4"
+sleep = "s3"
 editor = os.getenv("EDITOR") or "nvim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -252,6 +255,10 @@ awful.screen.connect_for_each_screen(function(s)
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "top", screen = s })
 
+    sprtr = wibox.widget.textbox()
+    sprtr:set_text(" ")
+
+
     -- Add widgets to the wibox
     s.mywibox:setup {
         layout = wibox.layout.align.horizontal,
@@ -267,8 +274,13 @@ awful.screen.connect_for_each_screen(function(s)
             mykeyboardlayout,
             wibox.widget.systray(),
             mytextclock,
+            sprtr,
+            batteryarc_widget(),
+            sprtr,
 	    spotify_widget(),
-	    batteryarc_widget(),
+            sprtr,
+	    volume_widget(),
+            sprtr,
             s.mylayoutbox,
         },
     }
@@ -329,6 +341,10 @@ globalkeys = gears.table.join(
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
+    awful.key({modkey,  "Shift"   }, "Return", function () awful.spawn(lock) end,
+              {description = "lock", group = "launcher"}),
+    awful.key({modkey,  "Control" }, "Return", function () awful.spawn(sleep) end,
+              {descripton = "sleep", group = "launcher"}),
     awful.key({ modkey, "Control" }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit,
